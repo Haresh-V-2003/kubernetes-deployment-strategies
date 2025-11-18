@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: devopstest-vs
+  namespace: default
+spec:
+  gateways:
+  - devopstest-gateway
+  hosts:
+  - devopstest.com
+  http:
+  - route:
+    - destination:
+        host: dashboards
+        port:
+          number: 5000

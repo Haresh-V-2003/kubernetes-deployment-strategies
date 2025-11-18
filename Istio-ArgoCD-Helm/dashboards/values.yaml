@@ -1,0 +1,47 @@
+replicaCount: 1
+
+image:
+  repository: dashboard
+  tag: latest
+  pullPolicy: Never
+
+service:
+  type: ClusterIP
+  port: 5000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+ingress:
+  enabled: false
+  hosts: []
+  tls: []
+
+# Enable Istio resources
+istio:
+  enabled: true        # Enable/disable creation of Gateway & VirtualService
+
+# Gateway configuration
+gateway:
+  hosts:
+    - "*"              # List of hostnames
+  port: 80             # Port exposed by Istio IngressGateway
+  tls:
+    enabled: false     # true/false
+    mode: SIMPLE       # Only if TLS is enabled
+    secretName: ""     # TLS secret name
+
+# VirtualService configuration
+virtualService:
+  hosts:
+    - "*"              # Must match Gateway hosts or specific domains
+  http:
+    - route:
+        - destination:
+            host: dashboards    # Your app service name (ClusterIP)
+            port: 5000          # Your service port
